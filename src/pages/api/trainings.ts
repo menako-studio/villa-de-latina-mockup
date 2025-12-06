@@ -1,10 +1,14 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { localDb } from '@/lib/local-db';
+import { initializeTrainings } from '@/lib/initialize-data';
 import { Training } from '@/types';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
     try {
+      // Auto-initialize data if empty (first time load)
+      await initializeTrainings();
+      
       const { status, limit } = req.query;
       
       const trainings = await localDb.getAll({

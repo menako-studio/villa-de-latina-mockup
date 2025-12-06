@@ -16,7 +16,7 @@ import {
 import Link from 'next/link';
 
 export default function Home() {
-  const { trainings, loading } = useTrainings('upcoming');
+  const { trainings, loading } = useTrainings('all');
   
   // Get featured trainings (first 6 for landing page)
   const featuredTrainings = trainings.slice(0, 6);
@@ -203,76 +203,48 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Online Events Section */}
+        {/* Past Events Section - Villa De Latina */}
         <section className="py-16 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-baseline justify-between mb-8">
-              <h2 className="text-3xl font-bold text-gray-900">Upcoming online events</h2>
+              <div>
+                <h2 className="text-3xl font-bold text-gray-900 mb-2">Program Pelatihan Villa De Latina</h2>
+                <p className="text-gray-600">Berkarya bersama masyarakat Kuningan, Ciamis, Banjar, dan Pangandaran</p>
+              </div>
               <Link
-                href="/trainings?type=online"
+                href="/trainings"
                 className="text-red-600 hover:text-red-700 font-semibold text-sm flex items-center"
               >
-                See all events
+                Lihat semua program
                 <ChevronDownIcon className="h-4 w-4 ml-1 transform -rotate-90" />
               </Link>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {[
-                {
-                  title: "Digital Marketing Bootcamp",
-                  date: "SAT, OCT 28 • 9:00 AM",
-                  attendees: "15 attendees",
-                  image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=300&h=200&fit=crop&crop=center",
-                  badge: "Online"
-                },
-                {
-                  title: "Public Speaking Masterclass", 
-                  date: "SUN, OCT 29 • 2:00 PM",
-                  attendees: "23 attendees",
-                  image: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=300&h=200&fit=crop&crop=center",
-                  badge: "Online"
-                },
-                {
-                  title: "Financial Planning Workshop",
-                  date: "MON, OCT 30 • 7:00 PM", 
-                  attendees: "31 attendees",
-                  image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=300&h=200&fit=crop&crop=center",
-                  badge: "Online"
-                },
-                {
-                  title: "Women's Entrepreneur Network",
-                  date: "TUE, OCT 31 • 6:00 PM",
-                  attendees: "18 attendees", 
-                  image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300&h=200&fit=crop&crop=center",
-                  badge: "Online"
-                }
-              ].map((event, index) => (
-                <div key={index} className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden cursor-pointer group">
-                  <div className="relative">
-                    <Image
-                      src={event.image}
-                      alt={event.title}
-                      width={300}
-                      height={200}
-                      className="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute top-3 left-3">
-                      <span className="bg-red-600 text-white px-2 py-1 rounded text-xs font-medium">
-                        {event.badge}
-                      </span>
+            {loading ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="bg-white rounded-xl shadow-sm animate-pulse">
+                    <div className="h-48 bg-gray-200"></div>
+                    <div className="p-4 space-y-3">
+                      <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                      <div className="h-4 bg-gray-200 rounded w-1/2"></div>
                     </div>
                   </div>
-                  <div className="p-4">
-                    <p className="text-xs text-red-600 font-medium mb-1">{event.date}</p>
-                    <h3 className="font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-red-600 transition-colors">
-                      {event.title}
-                    </h3>
-                    <p className="text-sm text-gray-600">{event.attendees}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {featuredTrainings.map((training) => (
+                  <TrainingCard key={training.id} training={training} />
+                ))}
+              </div>
+            )}
+
+            {!loading && featuredTrainings.length === 0 && (
+              <div className="text-center py-12">
+                <p className="text-gray-500">Belum ada program pelatihan tersedia.</p>
+              </div>
+            )}
           </div>
         </section>
 
